@@ -368,6 +368,7 @@ public class PlayAudio extends Activity implements Runnable
 		int trackBufSize = android.media.AudioTrack.getMinBufferSize(mParams.rate, mParams.outch, mParams.encoding);
 		AudioTrack track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, mParams.rate, mParams.outch, mParams.encoding, trackBufSize, AudioTrack.MODE_STREAM);
 		track.play();
+		appendLogTextView(mHandler, "play playback ok.\n");
 
 		if (mParams.source == AUDIO_SOURCE_WAVE_FILE) {
 			//Log.d("sakalog", "play " + mParams.wavefile);
@@ -394,6 +395,7 @@ public class PlayAudio extends Activity implements Runnable
 
 		track.stop();
 		track.release();
+		appendLogTextView(mHandler, "stop playback ok.\n");
 
 		synchronized (this) {
 			mPlay = false;
