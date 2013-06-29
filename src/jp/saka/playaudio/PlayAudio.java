@@ -36,25 +36,12 @@ public class PlayAudio extends Activity implements Runnable
 	private MediaPlayer mMediaPlayer = null;
 	private AudioManager mAudioManager;
 	private RadioGroup mSampleRateRadioGroup, mSelectModeRadioGroup;
-	private TextView mStatusTextView, mLogTextView;
+	private TextView mLogTextView;
 	private Handler mHandler;
 	private Resources mResources;
 
 	private boolean isAcousticEchoCancelerSupported() {
 		return AcousticEchoCanceler.isAvailable();
-	}
-
-	private void updateStatusTextView() {
-		String status = "";
-		if (mStatusTextView == null) {
-			return;
-		}
-		if (isAcousticEchoCancelerSupported()) {
-			status += "AEC: Supported";
-		} else {
-			status += "AEC: NOT Supported";
-		}
-		mStatusTextView.setText(status);
 	}
 
 	private void appendLogTextView(String s) {
@@ -90,12 +77,6 @@ public class PlayAudio extends Activity implements Runnable
 
 		mAudioManager = ((AudioManager) getSystemService(Context.AUDIO_SERVICE));
 
-		if (mAudioManager != null) {
-			mAudioManager.setSpeakerphoneOn(true);
-			appendLogTextView(mHandler, "set speakerphone on.\n");
-		}
-
-		mStatusTextView = (TextView)findViewById(R.id.StatusTextView);
 		mLogTextView = (TextView)findViewById(R.id.LogTextView);
 
 		mSampleRateRadioGroup = (RadioGroup)findViewById(R.id.SampleRateRadioGroup);
@@ -163,9 +144,39 @@ public class PlayAudio extends Activity implements Runnable
 			}
 		});
 
-		setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+		button = (Button) findViewById(R.id.SpeakerButton);
+		button.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Button b = (Button)v;
+				boolean isSpeakerOn = mAudioManager.isSpeakerphoneOn();
+				if (mAudioManager != null) {
+					mAudioManager.setSpeakerphoneOn(!isSpeakerOn);
+					appendLogTextView("setSpeakerphoneOn(" + (!isSpeakerOn ? "true" : "false") + ")\n");
+				}
+				if (mAudioManager.isSpeakerphoneOn()) {
+					b.setText("Speaker OFF");
+				} else {
+					b.setText("Speaker ON");
+				}
+			}
+		});
+		if (mAudioManager.isSpeakerphoneOn()) {
+			button.setText("Speaker OFF");
+		} else {
+			button.setText("Speaker ON");
+		}
 
-		updateStatusTextView();
+		if (isAcousticEchoCancelerSupported()) {
+			appendLogTextView("AEC is supported.\n");
+		} else {
+			appendLogTextView("AEC is NOT supported.\n");
+		}
+
+		setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
+		appendLogTextView("setVolumeControlStream(STREAM_VOICE_CALL)\n");
+
+		mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+		appendLogTextView("setMode(MODE_IN_COMMUNICATION)\n");
 	}
 
 	@Override
@@ -428,7 +439,7 @@ public class PlayAudio extends Activity implements Runnable
 			}
 		}
 		record.startRecording();
-		appendLogTextView(mHandler, " -> start recording ok.\n");
+		appendLogTextView(mHandler, "start recording ok.\n");
 		return record;
 	}
 
