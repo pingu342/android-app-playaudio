@@ -15,8 +15,8 @@ android-app-playaudio
 		* WAVを再生
 	* サンプリングレート (以下から選択)
 		* 44.1kHz
-		* 16kHz  
-	選択されたAutioTrackのサンプリングレートをAudioRecordのサンプリングレートにも適用。
+		* 16kHz
+		選択されたAutioTrackのサンプリングレートをAudioRecordのサンプリングレートにも適用。
 	* オーディオストリーム
 		* STREAM_VOICE_CALL
 
