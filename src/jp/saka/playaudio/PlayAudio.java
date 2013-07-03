@@ -22,7 +22,7 @@ import android.widget.RadioGroup;
 import android.os.Handler;
 import android.content.res.Resources;
 
-import android.media.audiofx.AcousticEchoCanceler;
+//import android.media.audiofx.AcousticEchoCanceler;
 
 import java.io.IOException;
 import java.io.File;
@@ -41,7 +41,8 @@ public class PlayAudio extends Activity implements Runnable
 	private Resources mResources;
 
 	private boolean isAcousticEchoCancelerSupported() {
-		return AcousticEchoCanceler.isAvailable();
+		return false;
+//		return AcousticEchoCanceler.isAvailable();
 	}
 
 	private void appendLogTextView(String s) {
@@ -181,8 +182,8 @@ public class PlayAudio extends Activity implements Runnable
 		setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		appendLogTextView("setVolumeControlStream(STREAM_VOICE_CALL)\n");
 
-		mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-		appendLogTextView("setMode(MODE_IN_COMMUNICATION)\n");
+//		mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+//		appendLogTextView("setMode(MODE_IN_COMMUNICATION)\n");
 	}
 
 	@Override
@@ -435,11 +436,12 @@ public class PlayAudio extends Activity implements Runnable
 		AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channel, encoding, recordBufSize);
 		appendLogTextView(mHandler, " -> sample rate: " + sampleRate + "\n");
 		appendLogTextView(mHandler, " -> buffer size:" + recordBufSize + "\n");
-		int sid = record.getAudioSessionId();
+//		int sid = record.getAudioSessionId();
 		if (false) {
 			appendLogTextView(mHandler, " -> do not use AEC.\n");
 		} else {
-			AcousticEchoCanceler aec = AcousticEchoCanceler.create(sid);
+			Object aec = null;
+//			AcousticEchoCanceler aec = AcousticEchoCanceler.create(sid);
 			if (aec == null) {
 				appendLogTextView(mHandler, " -> create AEC error.\n");
 			} else {
