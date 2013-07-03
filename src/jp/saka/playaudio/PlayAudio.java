@@ -172,6 +172,12 @@ public class PlayAudio extends Activity implements Runnable
 			appendLogTextView("AEC is NOT supported.\n");
 		}
 
+		if (mAudioManager.isBluetoothScoOn()) {
+			appendLogTextView("Bluetooth SCO is ON.\n");
+		} else {
+			appendLogTextView("Bluetooth SCO is OFF.\n");
+		}
+
 		setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		appendLogTextView("setVolumeControlStream(STREAM_VOICE_CALL)\n");
 
